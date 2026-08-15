@@ -5,6 +5,7 @@ from src.data.preprocessing import (
     normalize_images,
     split_training_validation,
 )
+from src.evaluation.plots import plot_training_history
 from src.models.autoencoder import build_autoencoder
 from src.training.trainer import (
     compile_autoencoder,
@@ -83,6 +84,8 @@ def main():
         "Test set preserved for final evaluation: "
         f"{x_test_noisy.shape}"
     )
+
+    plot_training_history(history)
 
 
 if __name__ == "__main__":
