@@ -1,3 +1,5 @@
+from pathlib import Path
+
 from src.data.loader import load_fashion_mnist
 from src.data.preprocessing import (
     add_channel_dimension,
@@ -86,6 +88,23 @@ def main():
     )
 
     plot_training_history(history)
+
+    model_path = Path(
+        "artifacts/denoising_autoencoder.keras"
+    )
+
+    model_path.parent.mkdir(
+        parents=True,
+        exist_ok=True,
+    )
+
+    autoencoder.save(model_path)
+
+    print()
+    print(
+        f"Trained model saved to: "
+        f"{model_path}"
+    )
 
 
 if __name__ == "__main__":
