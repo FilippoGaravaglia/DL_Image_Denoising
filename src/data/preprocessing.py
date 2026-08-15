@@ -8,6 +8,16 @@ def normalize_images(images):
     return images.astype("float32") / 255.0
 
 
+def add_channel_dimension(images):
+    """
+    Add the grayscale channel dimension required by Conv2D layers.
+
+    Example:
+        (60000, 28, 28) -> (60000, 28, 28, 1)
+    """
+    return np.expand_dims(images, axis=-1)
+
+
 def add_gaussian_noise(images, noise_factor=0.3, seed=42):
     """
     Add Gaussian noise to normalized images.
