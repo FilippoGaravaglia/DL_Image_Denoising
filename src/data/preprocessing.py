@@ -18,6 +18,27 @@ def add_channel_dimension(images):
     return np.expand_dims(images, axis=-1)
 
 
+def split_training_validation(
+    images,
+    validation_size=6000,
+):
+    """
+    Split the original Fashion-MNIST training set into
+    training and validation subsets.
+
+    Args:
+        images: Original training images.
+        validation_size: Number of images reserved for validation.
+
+    Returns:
+        Training images and validation images.
+    """
+    validation_images = images[:validation_size]
+    training_images = images[validation_size:]
+
+    return training_images, validation_images
+
+
 def add_gaussian_noise(images, noise_factor=0.3, seed=42):
     """
     Add Gaussian noise to normalized images.

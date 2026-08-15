@@ -3,6 +3,7 @@ from src.data.preprocessing import (
     add_channel_dimension,
     add_gaussian_noise,
     normalize_images,
+    split_training_validation,
 )
 from src.models.autoencoder import build_autoencoder
 from src.training.trainer import (
@@ -14,10 +15,17 @@ from src.training.trainer import (
 def main():
     x_train, _, x_test, _ = load_fashion_mnist()
 
+    x_train, x_validation = split_training_validation(
+        x_train,
+        validation_size=6000,
+    )
+
     x_train_clean = normalize_images(x_train)
+    x_validation_clean = normalize_images(x_validation)
     x_test_clean = normalize_images(x_test)
 
     x_train_clean = add_channel_dimension(x_train_clean)
+    x_validation_clean = add_channel_dimension(x_validation_clean)
     x_test_clean = add_channel_dimension(x_test_clean)
 
     x_train_noisy = add_gaussian_noise(
@@ -25,17 +33,21 @@ def main():
         seed=42,
     )
 
-    x_test_noisy = add_gaussian_noise(
-        x_test_clean,
+    x_validation_noisy = add_gaussian_noise(
+        x_validation_clean,
         seed=43,
     )
 
-    print("Training data prepared.")
+    x_test_noisy = add_gaussian_noise(
+        x_test_clean,
+        seed=44,
+    )
+
+    print("Data prepared successfully.")
     print()
-    print(f"Clean training shape: {x_train_clean.shape}")
-    print(f"Noisy training shape: {x_train_noisy.shape}")
-    print(f"Clean test shape: {x_test_clean.shape}")
-    print(f"Noisy test shape: {x_test_noisy.shape}")
+    print(f"Training images: {x_train_clean.shape}")
+    print(f"Validation images: {x_validation_clean.shape}")
+    print(f"Test images: {x_test_clean.shape}")
 
     autoencoder = build_autoencoder()
 
@@ -49,8 +61,8 @@ def main():
         model=autoencoder,
         x_train_noisy=x_train_noisy,
         x_train_clean=x_train_clean,
-        x_test_noisy=x_test_noisy,
-        x_test_clean=x_test_clean,
+        x_validation_noisy=x_validation_noisy,
+        x_validation_clean=x_validation_clean,
         epochs=10,
         batch_size=128,
     )
@@ -64,6 +76,12 @@ def main():
     print(
         f"Final validation loss: "
         f"{history.history['val_loss'][-1]:.6f}"
+    )
+
+    print()
+    print(
+        "Test set preserved for final evaluation: "
+        f"{x_test_noisy.shape}"
     )
 
 

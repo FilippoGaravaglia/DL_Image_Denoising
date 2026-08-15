@@ -18,8 +18,8 @@ def train_autoencoder(
     model: Model,
     x_train_noisy,
     x_train_clean,
-    x_test_noisy,
-    x_test_clean,
+    x_validation_noisy,
+    x_validation_clean,
     epochs=10,
     batch_size=128,
 ):
@@ -30,8 +30,8 @@ def train_autoencoder(
         model: Compiled autoencoder.
         x_train_noisy: Noisy training images.
         x_train_clean: Clean training images.
-        x_test_noisy: Noisy validation images.
-        x_test_clean: Clean validation images.
+        x_validation_noisy: Noisy validation images.
+        x_validation_clean: Clean validation images.
         epochs: Number of training epochs.
         batch_size: Number of images processed before a weight update.
 
@@ -42,8 +42,8 @@ def train_autoencoder(
         x=x_train_noisy,
         y=x_train_clean,
         validation_data=(
-            x_test_noisy,
-            x_test_clean,
+            x_validation_noisy,
+            x_validation_clean,
         ),
         epochs=epochs,
         batch_size=batch_size,
