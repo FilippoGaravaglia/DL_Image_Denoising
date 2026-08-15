@@ -6,6 +6,10 @@ from src.data.preprocessing import (
     add_gaussian_noise,
     normalize_images,
 )
+from src.evaluation.metrics import (
+    calculate_mse,
+    calculate_psnr,
+)
 from src.evaluation.plots import plot_denoising_results
 
 
@@ -43,6 +47,47 @@ def main():
     print(
         f"Reconstructed images shape: "
         f"{reconstructed_images.shape}"
+    )
+
+    noisy_mse = calculate_mse(
+        x_test_clean,
+        x_test_noisy,
+    )
+
+    denoised_mse = calculate_mse(
+        x_test_clean,
+        reconstructed_images,
+    )
+
+    noisy_psnr = calculate_psnr(
+        x_test_clean,
+        x_test_noisy,
+    )
+
+    denoised_psnr = calculate_psnr(
+        x_test_clean,
+        reconstructed_images,
+    )
+
+    print()
+    print("=== TEST SET METRICS ===")
+    print()
+    print(
+        f"Noisy vs Clean MSE: "
+        f"{noisy_mse:.6f}"
+    )
+    print(
+        f"Denoised vs Clean MSE: "
+        f"{denoised_mse:.6f}"
+    )
+    print()
+    print(
+        f"Noisy vs Clean PSNR: "
+        f"{noisy_psnr:.2f} dB"
+    )
+    print(
+        f"Denoised vs Clean PSNR: "
+        f"{denoised_psnr:.2f} dB"
     )
 
     plot_denoising_results(
